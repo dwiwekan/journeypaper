@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jurnal Paper</title>
+<script>
+  /* Apply the saved theme before first paint to avoid a flash. */
+  (function () {
+    try {
+      var t = localStorage.getItem('jp:theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23c9301a'/%3E%3Cpath d='M7 8l10-1M7 8l5 9M17 7l-5 10' stroke='white' stroke-width='1.6' stroke-linecap='round'/%3E%3Ccircle cx='7' cy='8' r='2.2' fill='white'/%3E%3Ccircle cx='17' cy='7' r='2.2' fill='white'/%3E%3Ccircle cx='12' cy='17' r='2.2' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#grid">Skip to paper list</a>
+
+<header class="topbar">
+  <div class="wrap bar">
+    <a class="brand" href="#papers" aria-label="Jurnal Paper, home">
+      <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M6.5 7.5 17.5 6.5M6.5 7.5 12 17.5M17.5 6.5 12 17.5"/>
+        <circle cx="6.5" cy="7.5" r="2.4" fill="currentColor"/>
+        <circle cx="17.5" cy="6.5" r="2.4" fill="currentColor"/>
+        <circle cx="12" cy="17.5" r="2.4" fill="currentColor"/>
+      </svg>
+      <span>Jurnal Paper</span>
+    </a>
+    <div class="bar-actions">
+      <button class="btn quiet" id="btn-data" type="button">Data</button>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark mode"></button>
+      <button class="btn primary" id="btn-add" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Add<span class="long"> paper</span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="view-catalog">
+  <section class="intro">
+    <h1>Paper reading journal</h1>
+    <p class="stats" id="stats"></p>
+  </section>
+
+  <div class="note" id="sample-note" hidden>
+    <span>This is sample data so you can see how things look.</span>
+    <button class="btn quiet small" id="btn-clear-sample" type="button">Remove sample data</button>
+  </div>
+
+  <div class="search" role="search">
+    <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="text" autocomplete="off" spellcheck="false" aria-label="Search papers" aria-describedby="search-hint" placeholder="Search titles, keywords, or any bit of your notes you remember">
+    <button class="icon-btn small" id="clear-q" type="button" aria-label="Clear search" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <kbd id="kbd" aria-hidden="true">/</kbd>
+  </div>
+  <p class="hint" id="search-hint">Small typos still match. Use quotes for a phrase, or #tag to filter by tag.</p>
+
+  <div class="toolbar">
+    <div class="seg" id="seg-status" role="group" aria-label="Reading status"></div>
+    <div class="tools">
+      <label class="sel">
+        <span class="sr">Sort</span>
+        <select id="sort">
+          <option value="relevance">Most relevant</option>
+          <option value="recent">Recently added</option>
+          <option value="title">Title A to Z</option>
+          <option value="year">Publication year</option>
+          <option value="rating">Highest rated</option>
+        </select>
+      </label>
+      <div class="seg icons" role="group" aria-label="View">
+        <button type="button" id="view-grid" aria-pressed="true" aria-label="Card view">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>
+        </button>
+        <button type="button" id="view-list" aria-pressed="false" aria-label="List view">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="3.5" rx="1.2"/><rect x="4" y="10.5" width="16" height="3.5" rx="1.2"/><rect x="4" y="16" width="16" height="3.5" rx="1.2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tagbar" id="tagbar" role="group" aria-label="Filter by tag"></div>
+  <p class="result-info" id="result-info" aria-live="polite"></p>
+
+  <section class="grid" id="grid" aria-label="Paper list"></section>
+  <div class="empty" id="empty" hidden></div>
+</main>
+
+<!-- Single paper page -->
+<main class="wrap page" id="view-paper" hidden>
+  <div class="page-bar">
+    <button class="btn quiet" id="pg-back" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+      All papers
+    </button>
+    <span class="save-state" id="save-state" role="status" aria-live="polite"></span>
+    <span class="row">
+      <button class="btn" id="pg-edit" type="button">Edit info</button>
+      <button class="btn quiet danger" id="pg-del" type="button">Delete</button>
+    </span>
+  </div>
+  <div class="page-grid">
+    <article class="doc">
+      <div class="doc-cover"><img id="pg-cover" alt=""></div>
+      <p class="d-meta" id="pg-meta"></p>
+      <h1 class="doc-title" id="pg-title"></h1>
+      <div class="d-row" id="pg-props"></div>
+      <div class="tldr" id="pg-tldr"></div>
+      <div class="editor" id="editor" aria-label="Paper notes"></div>
+      <p class="editor-hint">Type <kbd>/</kbd> to insert an image, equation, or other block. Paste images with Ctrl+V. Select text to make it bold or add a link.</p>
+    </article>
+    <aside class="toc" id="toc" aria-label="On this page" hidden>
+      <p class="toc-h">On this page</p>
+      <nav id="toc-list"></nav>
+    </aside>
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <p>Data is stored in this browser. Use the Data button to back it up.</p>
+</footer>
+
+<!-- Add / edit paper -->
+<dialog class="dlg" id="dlg-form" aria-labelledby="form-title">
+  <form class="form" id="paper-form">
+    <header class="dlg-head">
+      <h2 id="form-title">Add paper</h2>
+      <button class="icon-btn small" type="button" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+    <div class="dlg-body">
+      <div class="field">
+        <label for="f-title">Paper title</label>
+        <input id="f-title" type="text" required maxlength="300" autocomplete="off" placeholder="e.g. Attention Is All You Need">
+      </div>
+
+      <div class="field">
+        <span class="label" id="img-label">Image</span>
+        <div class="drop" id="drop" role="button" tabindex="0" aria-labelledby="img-label drop-text">
+          <img id="drop-preview" alt="" hidden>
+          <div class="drop-empty" id="drop-empty">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17 5-4.5 4 3.5 3-2.5 4 3.5"/></svg>
+            <p id="drop-text">Drag an image here, click to choose one, or paste with Ctrl+V</p>
+          </div>
+        </div>
+        <input type="file" id="f-file" accept="image/*" hidden>
+        <div class="img-row">
+          <input id="f-image-url" type="url" inputmode="url" aria-label="Image URL" placeholder="or paste an image URL">
+          <button class="btn quiet small" type="button" id="btn-img-clear" hidden>Remove image</button>
+        </div>
+        <p class="err" id="img-err" role="alert" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="f-link">Paper link <span class="opt">optional</span></label>
+        <input id="f-link" type="url" inputmode="url" autocomplete="off" placeholder="https://arxiv.org/abs/...">
+      </div>
+
+      <details class="more" id="more">
+        <summary>More details <span class="opt">AI will fill these in later</span></summary>
+        <div class="more-grid">
+          <div class="field span2">
+            <label for="f-authors">Authors</label>
+            <input id="f-authors" type="text" autocomplete="off" placeholder="e.g. Vaswani et al.">
+          </div>
+          <div class="field">
+            <label for="f-year">Year</label>
+            <input id="f-year" type="number" min="1900" max="2100" inputmode="numeric" placeholder="2017">
+          </div>
+          <div class="field">
+            <label for="f-venue">Venue</label>
+            <input id="f-venue" type="text" autocomplete="off" placeholder="NeurIPS, arXiv, ...">
+          </div>
+          <div class="field span2">
+            <label for="f-tags">Tags</label>
+            <div class="taginput" id="tag-wrap">
+              <span class="tag-list" id="f-tag-chips"></span>
+              <input id="f-tags" type="text" list="tag-suggest" autocomplete="off" placeholder="type, then press Enter">
+            </div>
+            <datalist id="tag-suggest"></datalist>
+          </div>
+          <div class="field">
+            <label for="f-status">Reading status</label>
+            <select id="f-status">
+              <option value="want">To read</option>
+              <option value="reading">Reading</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="label" id="rating-label">Rating</span>
+            <div class="stars" id="f-rating" role="radiogroup" aria-labelledby="rating-label"></div>
+          </div>
+          <div class="field span2">
+            <label for="f-summary">TL;DR <span class="opt">shown on the card</span></label>
+            <textarea id="f-summary" rows="3" placeholder="The core of the paper in two or three sentences. Full notes go on the paper page."></textarea>
+          </div>
+        </div>
+      </details>
+    </div>
+    <footer class="dlg-foot">
+      <button class="btn quiet" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit" id="btn-save">Save</button>
+    </footer>
+  </form>
+</dialog>
+
+<!-- Image preview -->
+<dialog class="dlg lightbox" id="dlg-img" aria-label="Image preview">
+  <button class="icon-btn d-close" type="button" data-close aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+  <img id="lb-img" alt="">
+  <p id="lb-cap" class="lb-cap" hidden></p>
+</dialog>
+
+<!-- Export and import -->
+<dialog class="dlg" id="dlg-data" aria-labelledby="data-title">
+  <div class="form">
+    <header class="dlg-head">
+      <h2 id="data-title">Journal data</h2>
+      <button class="icon-btn small" type="button" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+    <div class="dlg-body">
+      <p class="muted">Copy or download the contents of this box as a backup. To restore, paste JSON into the box and press Import. Papers with the same id are updated.</p>
+      <div class="field">
+        <label for="data-json">JSON</label>
+        <textarea id="data-json" rows="10" spellcheck="false" class="mono"></textarea>
+      </div>
+      <p class="msg" id="data-msg" role="status"></p>
+    </div>
+    <footer class="dlg-foot split">
+      <button class="btn quiet danger" type="button" id="btn-wipe">Delete everything</button>
+      <span class="row">
+        <button class="btn" type="button" id="btn-copy">Copy</button>
+        <button class="btn" type="button" id="btn-download">Download .json</button>
+        <button class="btn primary" type="button" id="btn-import">Import</button>
+      </span>
+    </footer>
+  </div>
+</dialog>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<!-- KaTeX is only used for equations. Offline, equations show as raw LaTeX. -->
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onload="window.dispatchEvent(new Event('katex-ready'))"></script>
+<script src="editor.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

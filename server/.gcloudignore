@@ -1,0 +1,11 @@
+# What `gcloud run deploy --source server` uploads: the Dockerfile and what it copies, nothing else.
+.gcloudignore
+.venv/
+tests/
+scripts/
+__pycache__/
+.pytest_cache/
+.env*
+*.pyc
+requirements-dev.txt
+pytest.ini

@@ -1,0 +1,43 @@
+/* ---------- top bar ---------- */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font: 700 1.15rem/1 var(--font-display); letter-spacing: -.02em; }
+.brand-mark { width: 28px; height: 28px; color: var(--accent); }
+.brand span { white-space: nowrap; }
+.bar-actions { display: flex; align-items: center; gap: 8px; }
+/* The header shows a different set of buttons to visitors, members and local mode. */
+.bar [hidden] { display: none !important; }
+a.btn { text-decoration: none; }
+
+/* ---------- page header ---------- */
+.intro { padding: 30px 0 22px; }
+h1 { margin: 0 0 12px; font: 700 clamp(2.2rem, 6.5vw, 3.9rem)/1 var(--font-display); letter-spacing: -.035em; text-wrap: balance; }
+.stats { margin: 0; color: var(--muted); font: 400 .85rem var(--font-mono); }
+.note {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px;
+  margin-bottom: 14px; padding: 8px 8px 8px 16px;
+  border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: .88rem;
+}
+.note[hidden] { display: none; }
+
+/* ---------- read-only: the public library and its paper pages ---------- */
+/* Nothing that adds, imports or changes a paper is shown. */
+.read-only #btn-add, .read-only #btn-data, .read-only #sample-note, .read-only #import-banner,
+.read-only #pg-edit, .read-only #pg-del, .read-only #save-state, .read-only #pg-public,
+.read-only #pg-props .seg, .read-only #pg-props .stars.input { display: none !important; }
+/* The footer talks about this browser's data; visitors have none. */
+.visitor .foot { display: none; }
+
+/* ---------- homepage ---------- */
+.home { padding-bottom: 72px; }
+.home[hidden] { display: none; }
+.home-intro { max-width: 780px; padding-bottom: 36px; }
+.lede { margin: 0; max-width: 62ch; color: var(--muted); font-size: 1.12rem; line-height: 1.6; }
+.tour { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; align-items: center; padding: 34px 0; border-top: 1px solid var(--line); }
+.tour h2 { margin: 0 0 10px; font: 700 1.6rem/1.2 var(--font-display); letter-spacing: -.02em; }
+.tour p { margin: 0 0 16px; max-width: 56ch; color: var(--muted); line-height: 1.6; }
+.tour-shot { width: 100%; height: auto; background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+.home-search { margin-bottom: 14px; padding-right: 8px; }
+.home-search input { height: 52px; }
+@media (min-width: 900px) {
+  .tour { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 44px; }
+}

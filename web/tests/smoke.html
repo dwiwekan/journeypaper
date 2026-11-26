@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JourneyPaper smoke checks</title>
+  <style>
+    body { font: 14px/1.5 ui-monospace, monospace; margin: 2rem; }
+    .pass { color: #1a7f37; } .fail { color: #cf222e; font-weight: bold; }
+    #mount { position: absolute; left: -9999px; width: 600px; }
+  </style>
+</head>
+<body>
+  <h1>Smoke checks</h1>
+  <p>Checks that need a real browser DOM. Serve with <code>make web</code> and open <code>/tests/smoke.html</code>. This page does not touch your saved papers.</p>
+  <div id="summary">Running…</div>
+  <ol id="out"></ol>
+  <div id="mount"></div>
+  <script type="module" src="smoke.js"></script>
+</body>
+</html>

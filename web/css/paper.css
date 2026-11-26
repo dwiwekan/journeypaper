@@ -1,0 +1,54 @@
+/* ---------- paper page ---------- */
+.page-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 0 18px; }
+.page-bar .row { display: inline-flex; gap: 8px; }
+.save-state { color: var(--muted); font: 400 .78rem var(--font-mono); }
+.page-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding-bottom: 96px; }
+.doc { min-width: 0; }
+.doc-cover { aspect-ratio: 16 / 5.5; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; }
+.doc-cover img { width: 100%; height: 100%; object-fit: cover; }
+/* Uploaded covers keep their own shape instead of being cropped to the banner. */
+.doc-cover:has(img.fit) { aspect-ratio: auto; display: grid; place-items: center; }
+.doc-cover img.fit { width: auto; max-width: 100%; height: auto; max-height: min(60vh, 520px); object-fit: contain; }
+.d-meta { margin: 22px 0 8px; color: var(--muted); font: 400 .8rem/1.5 var(--font-mono); }
+.doc-title { margin: 0 0 16px; font: 700 clamp(1.8rem, 5vw, 2.7rem)/1.1 var(--font-display); letter-spacing: -.03em; text-wrap: balance; }
+.d-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.d-row .tags { margin: 0; padding: 0; }
+.d-row a.btn { text-decoration: none; color: inherit; }
+.tldr { margin: 22px 0 30px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.tldr b { display: block; margin-bottom: 4px; color: var(--muted); font: 500 .72rem var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+.tldr p { margin: 0; max-width: 68ch; }
+.tldr p.dim { color: var(--muted); font-style: italic; }
+.editor-hint { margin: 32px 0 0; color: var(--muted); font-size: .82rem; }
+
+.toc { position: sticky; top: 24px; align-self: start; max-height: calc(100vh - 48px); overflow: auto; font-size: .85rem; }
+.toc-h { margin: 0 0 8px; color: var(--muted); font: 500 .72rem var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+.toc nav { display: flex; flex-direction: column; gap: 2px; border-left: 1px solid var(--line); }
+.toc button { margin-left: -1px; padding: 4px 12px; border: 0; border-left: 2px solid transparent; background: none; color: var(--muted); text-align: left; line-height: 1.35; }
+.toc button:hover { color: var(--ink); }
+.toc button.on { color: var(--accent); border-left-color: var(--accent); }
+.toc .toc-l3 { padding-left: 24px; font-size: .8rem; }
+@media (min-width: 1080px) {
+  .page-grid { grid-template-columns: minmax(0, 760px) 220px; justify-content: center; gap: 56px; }
+}
+@media (max-width: 1079px) { .toc { display: none; } }
+
+/* Hidden parts of the page header (Edit on your own public paper, the cover of a missing one). */
+.page-bar [hidden], .doc-cover[hidden] { display: none !important; }
+
+/* ---------- read-only notes (#pg-body): the editor's look, without editing ---------- */
+.read-view[hidden] { display: none; }
+.read-view h2.blk-body, .read-view h3.blk-body, .read-view blockquote.blk-body { margin: 0; }
+.read-view .blk-body { min-height: 0; }
+.read-view .fig { margin: 10px auto; }
+.read-view .fig img { cursor: zoom-in; }
+.code-view { margin: 4px 0; overflow-x: auto; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; font: 400 .88rem/1.6 var(--font-mono); tab-size: 2; white-space: pre; }
+.code-view code { font: inherit; }
+.read-view .eq { padding: 10px 8px; overflow-x: auto; text-align: center; font-size: 1.1em; }
+.read-view .eq math { font-size: 1.2em; }
+
+/* The Public switch: the dot fills in when the paper is public. */
+.btn.switch { gap: 8px; }
+.btn.switch[hidden] { display: none; }
+.btn.switch i { width: 10px; height: 10px; border-radius: 50%; border: 2px solid currentColor; opacity: .7; }
+.btn.switch[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.btn.switch[aria-pressed="true"] i { background: currentColor; opacity: 1; }

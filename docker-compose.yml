@@ -1,0 +1,18 @@
+# Local development database. Postgres 17 matches Supabase's major version.
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_PASSWORD: dev   # local only, never used outside this machine
+      POSTGRES_DB: journey
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+volumes:
+  pgdata:

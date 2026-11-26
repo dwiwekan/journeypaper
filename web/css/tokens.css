@@ -1,0 +1,64 @@
+/* Layout: one left-aligned column, a large title, a full-width search box, then paper cards.
+   Red accent like a correction pen, yellow highlighter for search matches. */
+
+:root {
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --bg: #eceff3;
+  --surface: #ffffff;
+  --surface-2: #f4f6f9;
+  --ink: #11151c;
+  --muted: #566070;
+  --line: #d8dde5;
+  --accent: #c9301a;
+  --on-accent: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
+  --mark-bg: #ffe45c;
+  --mark-ink: #11151c;
+  --st-want: #8a5a00;
+  --st-read: #1d5fd1;
+  --st-done: #17794a;
+  --shadow: 0 1px 2px rgba(17, 21, 28, .06), 0 14px 30px -16px rgba(17, 21, 28, .28);
+  --radius: 14px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0e13;
+    --surface: #121820;
+    --surface-2: #1a222c;
+    --ink: #e9edf2;
+    --muted: #9aa7b8;
+    --line: #263140;
+    --accent: #ff6b4a;
+    --on-accent: #1b0a06;
+    --mark-bg: #e8c93a;
+    --mark-ink: #11151c;
+    --st-want: #f0b44a;
+    --st-read: #7aa8ff;
+    --st-done: #5fd39a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 30px -16px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a0e13;
+  --surface: #121820;
+  --surface-2: #1a222c;
+  --ink: #e9edf2;
+  --muted: #9aa7b8;
+  --line: #263140;
+  --accent: #ff6b4a;
+  --on-accent: #1b0a06;
+  --mark-bg: #e8c93a;
+  --mark-ink: #11151c;
+  --st-want: #f0b44a;
+  --st-read: #7aa8ff;
+  --st-done: #5fd39a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 30px -16px rgba(0, 0, 0, .7);
+  color-scheme: dark;
+}

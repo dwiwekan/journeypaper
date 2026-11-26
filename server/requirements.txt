@@ -1,0 +1,11 @@
+# Runtime dependencies for the API (pinned; Python 3.10+).
+fastapi==0.162.5
+uvicorn[standard]==0.54.0
+pydantic==2.14.4
+pydantic-settings==2.15.0
+SQLAlchemy==2.0.58
+psycopg[binary]==3.3.9
+alembic==1.20.1
+PyJWT[crypto]==2.15.1
+cryptography==50.0.2
+nh3==0.3.8
