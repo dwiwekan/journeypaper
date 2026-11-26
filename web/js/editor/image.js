@@ -1,11 +1,22 @@
 // Shrinks pasted or uploaded images before they are saved.
 
+/* The file as a data: URL. The CSP's img-src allows data: but not blob:, so an object URL
+   would be blocked and the image would never load. */
+function readAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => reject(new Error('read'));
+    r.readAsDataURL(file);
+  });
+}
+
 /* Shrink images before saving. Small PNGs stay PNG so diagrams and text stay sharp. */
-export function compressImage(file, o) {
+export async function compressImage(file, o) {
   o = o || {};
   const max = o.max || 1400, q = o.q || 0.86;
+  const url = await readAsDataUrl(file);
   return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {
       try {
@@ -23,9 +34,9 @@ export function compressImage(file, o) {
         ctx.globalCompositeOperation = 'destination-over';
         ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
         resolve(c.toDataURL('image/jpeg', q));
-      } catch (err) { reject(err); } finally { URL.revokeObjectURL(url); }
+      } catch (err) { reject(err); }
     };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('decode')); };
+    img.onerror = () => reject(new Error('decode'));
     img.src = url;
   });
 }
