@@ -162,3 +162,15 @@ def test_export_includes_public(app_client, keys):
     app_client.patch(f"{P}/x", json={"public": True}, headers={**h, "If-Match": str(rev)})
     rows = json.loads(app_client.get("/api/v1/export", headers=h).content)
     assert {r["id"]: r["public"] for r in rows} == {"x": True, "y": False}
+
+
+def test_import_never_republishes_a_trashed_public_paper(app_client, keys):
+    h = bearer(keys[0])
+    imp(app_client, h, [item("t")])
+    rev = app_client.get(f"{P}/t", headers=h).json()["revision"]
+    app_client.patch(f"{P}/t", json={"public": True}, headers={**h, "If-Match": str(rev)})
+    app_client.delete(f"{P}/t", headers=h)
+    assert imp(app_client, h, [item("t", title="back", updated=T0 + 10**9)])["updated"] == 1
+    got = app_client.get(f"{P}/t", headers=h).json()
+    assert got["title"] == "back" and got["public"] is False
+    assert all(c["id"] != "t" for c in app_client.get("/api/v1/public/papers").json())

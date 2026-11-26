@@ -60,3 +60,15 @@ test('connect-src allows Supabase and the production API', () => {
 test('production host is GitHub Pages', () => {
   assert.deepEqual(constant('PROD_HOSTS'), ['dwiwekan.github.io']);
 });
+
+test('KaTeX is pinned past the maxExpand CVEs and checked by SRI', () => {
+  const tag = html.match(/<script[^>]*id="katex-js"[^>]*><\/script>/)[0];
+  const src = tag.match(/src="([^"]+)"/)[1];
+  const [maj, min, patch] = src.match(/KaTeX\/(\d+)\.(\d+)\.(\d+)\//).slice(1).map(Number);
+  assert.ok(maj > 0 || min > 16 || (min === 16 && patch >= 10), `KaTeX ${maj}.${min}.${patch} has CVE-2024-28243/28244`);
+  assert.match(tag, /\sintegrity="sha384-[A-Za-z0-9+/]{64}"/);
+  assert.match(tag, /\scrossorigin="anonymous"/);
+  const scripts = csp()['script-src'];
+  assert.ok(!scripts.includes('https://cdnjs.cloudflare.com'), 'script-src allows the whole of cdnjs');
+  assert.ok(scripts.includes(src), 'script-src does not list the exact KaTeX file');
+});

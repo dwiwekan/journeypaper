@@ -108,11 +108,13 @@ def iter_full(conn: Connection, user_id: str) -> Iterator[Mapping]:
 
 
 def upsert_import(conn: Connection, user_id: str, row: dict) -> str:
-    """'created', 'updated' (incoming updated_at is later), or 'skipped'. Never deletes."""
+    """'created', 'updated' (incoming updated_at is later), or 'skipped'. Never deletes.
+    A row brought back from the Trash comes back private: an import never publishes."""
     sets = ", ".join(f"{c} = EXCLUDED.{c}" for c in _INSERT_COLS)
     hit = conn.execute(
         text(f"{_INSERT} ON CONFLICT (user_id, id) DO UPDATE SET {sets}, "
-             f"revision = {T}.revision + 1, deleted_at = NULL "
+             f"revision = {T}.revision + 1, deleted_at = NULL, "
+             f"is_public = {T}.is_public AND {T}.deleted_at IS NULL "
              f"WHERE {T}.updated_at < EXCLUDED.updated_at RETURNING (xmax = 0) AS inserted"),
         {**row, "user_id": user_id},
     ).first()
