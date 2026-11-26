@@ -10,7 +10,7 @@ const LOCAL = { signedIn: false, apiOn: false };
 
 test('parses every route', () => {
   assert.deepEqual(parseRoute(''), { name: 'empty' });
-  assert.deepEqual(parseRoute('#home'), { name: 'home' });
+  assert.deepEqual(parseRoute('#home'), { name: 'library', q: '' }); // old homepage links open the library
   assert.deepEqual(parseRoute('#library'), { name: 'library', q: '' });
   assert.deepEqual(parseRoute('#library?q=a%20b'), { name: 'library', q: 'a b' });
   assert.deepEqual(parseRoute(`#library/${OWNER}/x1`), { name: 'public-paper', owner: OWNER, id: 'x1' });
@@ -38,18 +38,17 @@ test('signed-out member routes go to the library', () => {
   assert.deepEqual(resolveRoute({ name: 'library', q: 'x' }, OUT), { name: 'library', q: 'x' });
 });
 
-test('empty hash: home when signed out, papers when signed in', () => {
-  assert.deepEqual(resolveRoute({ name: 'empty' }, OUT), { name: 'home' });
+test('empty hash: library when signed out, papers when signed in', () => {
+  assert.deepEqual(resolveRoute({ name: 'empty' }, OUT), { name: 'library', q: '' });
   assert.deepEqual(resolveRoute({ name: 'empty' }, IN), { name: 'papers' });
   assert.deepEqual(resolveRoute({ name: 'signin' }, IN), { name: 'papers' });
   assert.deepEqual(resolveRoute({ name: 'trash' }, IN), { name: 'trash' });
-  assert.deepEqual(resolveRoute({ name: 'home' }, IN), { name: 'home' });
 });
 
 test("local mode keeps today's routes", () => {
   assert.deepEqual(resolveRoute({ name: 'empty' }, LOCAL), { name: 'papers' });
   assert.deepEqual(resolveRoute({ name: 'paper', id: 'x1' }, LOCAL), { name: 'paper', id: 'x1' });
-  for (const r of [{ name: 'home' }, { name: 'library', q: 'a' }, { name: 'public-paper', owner: OWNER, id: 'x1' }, { name: 'signin' }, { name: 'trash' }]) {
+  for (const r of [{ name: 'library', q: 'a' }, { name: 'public-paper', owner: OWNER, id: 'x1' }, { name: 'signin' }, { name: 'trash' }]) {
     assert.deepEqual(resolveRoute(r, LOCAL), { name: 'papers' });
   }
 });

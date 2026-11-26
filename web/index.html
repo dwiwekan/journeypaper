@@ -33,7 +33,7 @@
 
 <header class="topbar">
   <div class="wrap bar">
-    <a class="brand" href="#" aria-label="JourneyPaper, home">
+    <a class="brand" href="#" aria-label="JourneyPaper">
       <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
         <path d="M6.5 7.5 17.5 6.5M6.5 7.5 12 17.5M17.5 6.5 12 17.5"/>
         <circle cx="6.5" cy="7.5" r="2.4" fill="currentColor"/>
@@ -57,41 +57,6 @@
     </div>
   </div>
 </header>
-
-<!-- Homepage for visitors (API mode only): what this is, a short tour, and a search into the library -->
-<main class="wrap home" id="view-home" hidden>
-  <section class="intro home-intro">
-    <h1>Notes on the papers I read</h1>
-    <p class="lede">JourneyPaper is a reading journal for research papers. Every paper gets one page:
-      what it is about, how it works, what it found, in my own words, with figures and equations.
-      The public pages are open to read here, no account needed.</p>
-  </section>
-
-  <section class="tour" aria-labelledby="tour-read-h">
-    <div class="tour-text">
-      <h2 id="tour-read-h">Read a paper</h2>
-      <p>Each page follows the paper's own path: the introduction, related work, the method, the
-        results and the conclusion. Short sections, the key idea called out, the equation that
-        matters written out in full. A contents list on the side jumps to any part.</p>
-    </div>
-    <img class="tour-shot" src="img/tour-read.png" width="1280" height="800" loading="lazy" alt="A paper page: the cover image, title, a one-line summary, then the notes under headings with a contents list on the right.">
-  </section>
-
-  <section class="tour" aria-labelledby="tour-search-h">
-    <div class="tour-text">
-      <h2 id="tour-search-h">Find it by anything you remember</h2>
-      <p>Search reads the notes too, not only the titles. Type a word you remember from inside a
-        paper, even with a typo, and the paper comes up with that line of the notes highlighted.</p>
-      <form class="search home-search" id="home-search" role="search">
-        <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="home-q" type="search" autocomplete="off" spellcheck="false" aria-label="Search the library" placeholder="Try a word from inside a paper">
-        <button class="btn primary small" type="submit">Search</button>
-      </form>
-      <p><button class="btn" id="home-browse" type="button">Browse the library</button></p>
-    </div>
-    <img class="tour-shot" src="img/tour-search.png" width="1280" height="800" loading="lazy" alt="The library searching a word that appears only in a paper's notes; the card shows the matching line with the word highlighted.">
-  </section>
-</main>
 
 <!-- Sign-in, shown only when the app saves to the server -->
 <main class="wrap signin" id="view-signin" hidden>

@@ -1,6 +1,7 @@
-// The hash router. Routes: '' (empty), #home, #library, #library?q=…, #library/<owner>/<id>,
-// #papers, #paper-<id>, #trash, #signin. resolveRoute sends each one where this visitor may go;
-// a redirect replaces the history entry, so Back does not bounce through it again.
+// The hash router. Routes: '' (empty), #library, #library?q=…, #library/<owner>/<id>,
+// #papers, #paper-<id>, #trash, #signin; #home (the old homepage) opens the library.
+// resolveRoute sends each one where this visitor may go; a redirect replaces the history entry,
+// so Back does not bounce through it again.
 
 const ID = '[A-Za-z0-9_-]+';
 const OWNER = '[0-9A-Fa-f-]+';
@@ -13,8 +14,8 @@ function decode(s) {
 export function parseRoute(hash) {
   const h = String(hash || '').replace(/^#/, '');
   let m;
-  if (h === 'home' || h === 'papers' || h === 'trash' || h === 'signin') return { name: h };
-  if (h === 'library') return { name: 'library', q: '' };
+  if (h === 'papers' || h === 'trash' || h === 'signin') return { name: h };
+  if (h === 'library' || h === 'home') return { name: 'library', q: '' };
   if ((m = h.match(/^library\?q=(.*)$/s))) return { name: 'library', q: decode(m[1]) };
   if ((m = h.match(new RegExp(`^library/(${OWNER})/(${ID})$`)))) return { name: 'public-paper', owner: m[1], id: m[2] };
   if ((m = h.match(new RegExp(`^paper-(${ID})$`)))) return { name: 'paper', id: m[1] };
@@ -29,8 +30,7 @@ export function resolveRoute(route, { signedIn, apiOn }) {
   /* Local mode has no accounts and no public list: the m1 screens only. */
   if (!apiOn) return n === 'paper' || n === 'papers' ? route : { name: 'papers' };
   if (!signedIn) {
-    if (n === 'empty') return { name: 'home' };
-    if (MEMBER.has(n)) return { name: 'library', q: '' };
+    if (n === 'empty' || MEMBER.has(n)) return { name: 'library', q: '' };
     return route;
   }
   if (n === 'empty' || n === 'signin') return { name: 'papers' };
@@ -40,7 +40,7 @@ export function resolveRoute(route, { signedIn, apiOn }) {
 /** The hash (without '#') for a route; parseRoute('#' + routeHash(r)) gives r back. */
 export function routeHash(route) {
   switch (route.name) {
-    case 'home': case 'papers': case 'trash': case 'signin': return route.name;
+    case 'papers': case 'trash': case 'signin': return route.name;
     case 'library': return route.q ? 'library?q=' + encodeURIComponent(route.q) : 'library';
     case 'public-paper': return `library/${route.owner}/${route.id}`;
     case 'paper': return 'paper-' + route.id;

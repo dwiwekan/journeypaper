@@ -1,7 +1,7 @@
 // The five screens. Exactly one is shown at a time.
 import { $ } from '../util.js';
 
-const VIEWS = ['signin', 'home', 'catalog', 'paper', 'trash'];
+const VIEWS = ['signin', 'catalog', 'paper', 'trash'];
 
 /** Shows #view-<name> and hides the others. */
 export function showView(name) {

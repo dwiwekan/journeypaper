@@ -191,7 +191,7 @@ export function initPaperPage() {
   window.addEventListener('beforeunload', (e) => { if (saver.pending()) { e.preventDefault(); e.returnValue = ''; } });
 
   $('#pg-back').addEventListener('click', () => { location.hash = state.mode === 'public' ? 'library' : 'papers'; });
-  /* The empty hash: the router sends it home (visitors) or to the papers (members, local mode). */
+  /* The empty hash: the router sends it to the library (visitors) or to the papers (members, local mode). */
   $('.brand').addEventListener('click', (e) => { e.preventDefault(); location.hash = ''; });
   $('#pg-edit').addEventListener('click', async () => { await flushSave(); openForm(getPaper(state.openId)); });
   $('#pg-del').addEventListener('click', () => removePaper(state.openId));

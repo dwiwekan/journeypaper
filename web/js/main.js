@@ -18,10 +18,8 @@ import { initAuth, isSignedIn, showSignIn } from './ui/auth.js';
 import { initImportBanner } from './ui/import-banner.js';
 import { initRouter } from './ui/router.js';
 import { showLibrary, showPublicPaper, initLibrary, leaveLibrary } from './ui/library.js';
-import { initHome } from './ui/home.js';
 import { initTrash, showTrash } from './ui/trash.js';
 import { initPublish } from './ui/publish.js';
-import { showView } from './ui/views.js';
 
 initTheme();
 initDialogs();
@@ -33,7 +31,6 @@ initDataDialog();
 initShortcuts();
 initConflict();
 initLibrary();
-initHome();
 initTrash();
 initPublish();
 
@@ -71,7 +68,6 @@ async function loadMine() {
 /* Member screens show the member's own papers, so they leave the read-only library first. */
 const mine = (r) => { leaveLibrary(); setMode('mine'); return route(r); };
 const handlers = {
-  home: async () => { leaveLibrary(); await route(null); showView('home'); window.scrollTo(0, 0); },
   library: (r) => showLibrary(r.q),
   'public-paper': (r) => showPublicPaper(r.owner, r.id),
   papers: mine,
